@@ -14,7 +14,8 @@ const metricsHandler = async (req, res) => {
   res.set("Content-Type", register.contentType);
 
   const provider = new ethers.providers.JsonRpcProvider(options.rpcurl);
-  const blockNumberPromise = provider.getBlockNumber().then((number) => {
+  const blockNumberPromise = provider.getBlockNumber().then((blockNumber) => {
+    const number = BigNumber.from(blockNumber).toNumber()
     latestBlockHeightMetric.set(number);
 
     return provider.getBlock(number).then((block) => {
