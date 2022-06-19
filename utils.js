@@ -1,5 +1,6 @@
 const path = require('path');
-const { readdir, stat } = require('fs/promises');
+const {promises} = require('fs');
+const { readdir, stat } = promises
 
 const dirSize = async directory => {
   const files = await readdir( directory );

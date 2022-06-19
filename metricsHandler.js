@@ -28,7 +28,10 @@ const metricsHandler = async (req, res) => {
     blockchainSizeOnDiskBytesMetric.set(size);
   });
 
-  Promise.all([blockNumberPromise, sizeOnDiskPromise])
+  Promise.all([
+    blockNumberPromise, 
+    sizeOnDiskPromise,
+  ])
     .then(() => res.end(register.metrics()))
     .catch((error) => {
       console.error(error);
