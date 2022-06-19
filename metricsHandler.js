@@ -1,7 +1,7 @@
 const { register } = require("prom-client");
 const options = require("./commander");
-const { dirSize } = require('./utils')
-const { providers, BigNumber} = require("ethers");
+const { dirSize } = require("./utils");
+const { providers, BigNumber } = require("ethers");
 const {
   latestBlockHeightMetric,
   latestBlockTimestampMetric,
@@ -14,7 +14,7 @@ const metricsHandler = async (req, res) => {
 
   const provider = new providers.JsonRpcProvider(options.rpcurl);
   const blockNumberPromise = provider.getBlockNumber().then((blockNumber) => {
-    const number = BigNumber.from(blockNumber).toNumber()
+    const number = BigNumber.from(blockNumber).toNumber();
     latestBlockHeightMetric.set(number);
 
     return provider.getBlock(number).then((block) => {
@@ -27,10 +27,7 @@ const metricsHandler = async (req, res) => {
     blockchainSizeOnDiskBytesMetric.set(size);
   });
 
-  Promise.all([
-    blockNumberPromise, 
-    sizeOnDiskPromise,
-  ])
+  Promise.all([blockNumberPromise, sizeOnDiskPromise])
     .then(() => res.end(register.metrics()))
     .catch((error) => {
       console.error(error);
