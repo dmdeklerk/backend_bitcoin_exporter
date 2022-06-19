@@ -10,11 +10,6 @@ const latestBlockHeightMetric = new Gauge({
     help: 'The latest block height or index',
 });
 
-const latestBlockIdMetric = new Gauge({
-  name: 'backend_ethereum_latest_block_id',
-  help: 'The latest block id',
-});
-
 const latestBlockTimestampMetric = new Gauge({
   name: 'backend_ethereum_latest_block_timestamp',
   help: 'The latest block timestamp',
@@ -32,7 +27,6 @@ const blockchainSizeOnDiskBytesMetric = new Gauge({
 
 module.exports = {
   latestBlockHeightMetric,
-  latestBlockIdMetric,
   latestBlockTimestampMetric,
   latestBlockTransactionCountMetric,
   blockchainSizeOnDiskBytesMetric,

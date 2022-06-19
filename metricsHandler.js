@@ -4,7 +4,6 @@ const { dirSize } = require('./utils')
 const { providers, BigNumber} = require("ethers");
 const {
   latestBlockHeightMetric,
-  latestBlockIdMetric,
   latestBlockTimestampMetric,
   latestBlockTransactionCountMetric,
   blockchainSizeOnDiskBytesMetric,
@@ -19,7 +18,6 @@ const metricsHandler = async (req, res) => {
     latestBlockHeightMetric.set(number);
 
     return provider.getBlock(number).then((block) => {
-      latestBlockIdMetric.set(block.hash);
       latestBlockTimestampMetric.set(block.timestamp);
       latestBlockTransactionCountMetric.set(block.transactions.length);
     });
