@@ -28,7 +28,7 @@ const metricsHandler = async (req, res) => {
   });
 
   Promise.all([blockNumberPromise, sizeOnDiskPromise])
-    .then(() => res.end(register.metrics()))
+    .then(() => res.end(await register.metrics()))
     .catch((error) => {
       console.error(error);
 

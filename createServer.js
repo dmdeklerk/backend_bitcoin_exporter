@@ -1,14 +1,14 @@
 const express = require("express");
-// const helmet = require("helmet");
-// const compression = require("compression");
+const helmet = require("helmet");
+const compression = require("compression");
 const options = require('./commander')
 
 const createServer = (metricsHandler) => {
   const port = options.port;
   const app = express();
 
-  // app.use(compression());
-  // app.use(helmet());
+  app.use(compression());
+  app.use(helmet());
   app.get("/metrics", metricsHandler);
 
   app.use((req, res) => {
