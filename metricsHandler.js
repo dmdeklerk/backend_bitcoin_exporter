@@ -1,7 +1,7 @@
 const { register } = require("prom-client");
 const options = require("./commander");
 const { dirSize } = require('./utils')
-const ethers = require("ethers");
+const { providers, BigNumber} = require("ethers");
 const {
   latestBlockHeightMetric,
   latestBlockIdMetric,
@@ -13,7 +13,7 @@ const {
 const metricsHandler = async (req, res) => {
   res.set("Content-Type", register.contentType);
 
-  const provider = new ethers.providers.JsonRpcProvider(options.rpcurl);
+  const provider = new providers.JsonRpcProvider(options.rpcurl);
   const blockNumberPromise = provider.getBlockNumber().then((blockNumber) => {
     const number = BigNumber.from(blockNumber).toNumber()
     latestBlockHeightMetric.set(number);
