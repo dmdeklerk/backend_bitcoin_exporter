@@ -30,7 +30,7 @@ const metricsHandler = async (req, res) => {
     blockchainSizeOnDiskBytesMetric.set(size);
   });
 
-  const command = `${options.geth} attach --datadir ${options.ipcdir} --exec 'JSON.stringify(web3.eth.syncing)'`;
+  const command = `${options.geth} attach --datadir ${options.ipcdir} --exec 'web3.eth.syncing'`;
   const ipcSyncingPromise = execCmd(command).then((output) => {
     
     console.log('output 1', { output, typeof: typeof output })
