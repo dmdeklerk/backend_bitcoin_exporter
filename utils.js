@@ -13,7 +13,6 @@ const dirSize = async directory => {
 const execCmd = command => {
   return new Promise((resolve,reject) => {
     exec(command, (err,output) => {
-      console.log('execCmd',{command,err,output})
       if (err) {
         reject(err)
       }
