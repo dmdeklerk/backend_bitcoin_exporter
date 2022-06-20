@@ -32,8 +32,12 @@ const metricsHandler = async (req, res) => {
 
   const command = `${options.geth} attach --datadir ${options.ipcdir} --exec 'JSON.stringify(web3.eth.syncing)'`;
   const ipcSyncingPromise = execCmd(command).then((output) => {
+    
+    console.log('output 1', { output, typeof: typeof output })
     const data = JSON.parse(output);
-    if (typeof data != "object") {
+    console.log('output 2', { data, typeof: typeof data })
+
+    if (typeof data == "object") {
       const { currentBlock, highestBlock, syncedAccounts } = data;
       syncingHighestBlockMetric.set(highestBlock);
       syncingCurrentBlockMetric.set(currentBlock);
