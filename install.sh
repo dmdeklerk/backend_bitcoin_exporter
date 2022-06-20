@@ -3,6 +3,8 @@
 
 if which node > /dev/null
 then
+  echo "node is installed..."
+else 
   echo "Please install node first"
   echo "sudo curl -fsSL https://deb.nodesource.com/setup_14.x | sudo bash -"
   echo "sudo apt-get install -y nodejs"
