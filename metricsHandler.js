@@ -1,12 +1,15 @@
 const { register } = require("prom-client");
 const options = require("./commander");
-const { dirSize } = require("./utils");
+const { dirSize, execCmd } = require("./utils");
 const { providers, BigNumber } = require("ethers");
 const {
   latestBlockHeightMetric,
   latestBlockTimestampMetric,
   latestBlockTransactionCountMetric,
   blockchainSizeOnDiskBytesMetric,
+  syncingHighestBlockMetric,
+  syncingCurrentBlockMetric,
+  syncingSyncedAccountsMetric,
 } = require("./metrics");
 
 const metricsHandler = async (req, res) => {
@@ -27,13 +30,22 @@ const metricsHandler = async (req, res) => {
     blockchainSizeOnDiskBytesMetric.set(size);
   });
 
-  Promise.all([blockNumberPromise, sizeOnDiskPromise])
-    .then(
-      () => register.metrics().then(
-        (metrics) => {
-          res.end(metrics);
-        }
-      )
+  const command = `${options.geth} attach --datadir ${options.ipcdir} --exec 'JSON.stringify(web3.eth.syncing)'`;
+  const ipcSyncingPromise = execCmd(command).then((output) => {
+    const data = JSON.parse(output);
+    if (typeof data != "object") {
+      const { currentBlock, highestBlock, syncedAccounts } = data;
+      syncingHighestBlockMetric.set(highestBlock);
+      syncingCurrentBlockMetric.set(currentBlock);
+      syncingSyncedAccountsMetric.set(syncedAccounts);
+    }
+  });
+
+  Promise.all([blockNumberPromise, sizeOnDiskPromise, ipcSyncingPromise])
+    .then(() =>
+      register.metrics().then((metrics) => {
+        res.end(metrics);
+      })
     )
     .catch((error) => {
       console.error(error);

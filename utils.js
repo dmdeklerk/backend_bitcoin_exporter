@@ -1,6 +1,7 @@
 const path = require('path');
 const {promises} = require('fs');
 const { readdir, stat } = promises
+const { exec } = require('child_process')
 
 const dirSize = async directory => {
   const files = await readdir( directory );
@@ -9,4 +10,17 @@ const dirSize = async directory => {
   return ( await Promise.all( stats ) ).reduce( ( accumulator, { size } ) => accumulator + size, 0 );
 }
 
-module.exports = { dirSize }
+const execCmd = command => {
+  return new Promise((resolve,reject) => {
+    exec(command, (err,output) => {
+      if (err) {
+        reject(err)
+      }
+      else {
+        resolve(output)
+      }
+    })
+  })
+}
+
+module.exports = { dirSize, execCmd }

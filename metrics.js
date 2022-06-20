@@ -25,9 +25,27 @@ const blockchainSizeOnDiskBytesMetric = new Gauge({
   help: 'Blockchain size on disk in bytes',
 });
 
+const syncingHighestBlockMetric = new Gauge({
+  name: 'backend_ethereum_syncing_highest_block',
+  help: 'The highest block reported by syncing',
+});
+
+const syncingCurrentBlockMetric = new Gauge({
+  name: 'backend_ethereum_syncing_current_block',
+  help: 'The current block reported by syncing',
+});
+
+const syncingSyncedAccountsMetric = new Gauge({
+  name: 'backend_ethereum_syncing_synced_accounts',
+  help: 'The synced accounts reported by syncing',
+});
+
 module.exports = {
   latestBlockHeightMetric,
   latestBlockTimestampMetric,
   latestBlockTransactionCountMetric,
   blockchainSizeOnDiskBytesMetric,
+  syncingHighestBlockMetric,
+  syncingCurrentBlockMetric,
+  syncingSyncedAccountsMetric,
 }
