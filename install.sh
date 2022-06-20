@@ -1,7 +1,17 @@
-# run as sudo
+# Requires nodejs
+# sudo curl -fsSL https://deb.nodesource.com/setup_14.x | sudo bash - &&  sudo apt-get install -y nodejs
+
+if which node > /dev/null
+then
+  echo "Please install node first"
+  echo "sudo curl -fsSL https://deb.nodesource.com/setup_14.x | sudo bash -"
+  echo "sudo apt-get install -y nodejs"
+  exit
+fi
+
 DIR=`pwd`
 APP="backend_ethereum_exporter"
-npm install
+sudo npm install
 echo "Installing $APP in $DIR"
 sudo tee "/lib/systemd/system/$APP.service" <<EOF
 [Unit]
