@@ -20,5 +20,6 @@ module.exports = {
   host: options.host,
   user: options.user,
   pass: options.pass,
-  rpcport: options.rpcport
+  rpcport: options.rpcport,
+  dir: options.dir,
 }
