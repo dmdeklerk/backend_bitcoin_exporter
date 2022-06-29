@@ -1,44 +1,32 @@
 const { register } = require("prom-client");
 const options = require("./commander");
-const { dirSize, execCmd } = require("./utils");
-const { providers, BigNumber } = require("ethers");
+const { dirSize } = require("./utils");
+const Client = require('bitcoin-core');
 const {
-  latestBlockHeightMetric,
-  latestBlockTimestampMetric,
-  latestBlockTransactionCountMetric,
+  totalBlocksMetric,
+  totalHeadersMetric,
+  totalProgressPercentageMetric,
   blockchainSizeOnDiskBytesMetric,
-  syncingHighestBlockMetric,
-  syncingCurrentBlockMetric,
-  syncingSyncedAccountsMetric,
 } = require("./metrics");
 
 const metricsHandler = async (req, res) => {
   res.set("Content-Type", register.contentType);
 
-  const provider = new providers.JsonRpcProvider(options.rpcurl);
-  const blockNumberPromise = provider.getBlockNumber().then((blockNumber) => {
-    const number = BigNumber.from(blockNumber).toNumber();
-    latestBlockHeightMetric.set(number);
-
-    return provider.getBlock(number).then((block) => {
-      latestBlockTimestampMetric.set(block.timestamp);
-      latestBlockTransactionCountMetric.set(block.transactions.length);
-    });
+  const client = new Client({ 
+    host: options.host, 
+    username: options.user, 
+    password: options.pass, 
+    port: options.rpcport 
+  });  
+  const blockchainInfoPromise = client.getBlockchainInfo().then((data) => {
+    totalBlocksMetric.set(data.blocks)
+    totalHeadersMetric.set(data.headers)
+    const percentage = parseFloat(data.verificationprogress) * 100
+    totalProgressPercentageMetric.set(percentage)
   });
 
   const sizeOnDiskPromise = dirSize(options.dir).then((size) => {
     blockchainSizeOnDiskBytesMetric.set(size);
-  });
-
-  const command = `${options.geth} attach --datadir ${options.ipcdir} --exec 'JSON.stringify(web3.eth.syncing)'`;
-  const ipcSyncingPromise = execCmd(command).then((output) => {
-    const data = JSON.parse(JSON.parse(output.trim()));
-    if (typeof data == "object") {
-      const { currentBlock, highestBlock, syncedAccounts } = data;
-      syncingHighestBlockMetric.set(highestBlock);
-      syncingCurrentBlockMetric.set(currentBlock);
-      syncingSyncedAccountsMetric.set(syncedAccounts);
-    }
   });
 
   Promise.all([blockNumberPromise, sizeOnDiskPromise, ipcSyncingPromise])

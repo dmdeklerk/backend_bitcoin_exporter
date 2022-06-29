@@ -1,5 +1,5 @@
 {
-  "name": "backend_ethereum_exporter",
+  "name": "backend_bitcoin_exporter",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github-as-dmdeklerk:heatcrypto/backend_ethereum_exporter.git"
+    "url": "git@github-as-dmdeklerk:dmdeklerk/backend_bitcoin_exporter.git"
   },
   "author": "me",
   "license": "ISC",
   "dependencies": {
+    "bitcoin-core": "^1.2.0",
     "commander": "^9.3.0",
     "compression": "^1.7.4",
-    "ethers": "^5.6.9",
     "express": "^4.18.1",
     "fs": "^0.0.1-security",
     "helmet": "^5.1.0",
