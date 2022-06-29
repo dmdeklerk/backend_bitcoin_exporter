@@ -8,6 +8,7 @@ commander
   .option('-u, --user <user>', 'RPC user', 'rpc')
   .option('-p, --pass <pass>', 'RPC pass', 'rpc')
   .option('-r, --rpcport <rpcport>', 'RPC port', '8030')
+  .option('-d, --dir <dir>', 'Directory where blockchain is stored', '/opt/coins/data/bitcoin/backend')
   .parse(process.argv);
 
 const options = commander.opts();

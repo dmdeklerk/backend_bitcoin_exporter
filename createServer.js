@@ -18,7 +18,7 @@ const createServer = (metricsHandler) => {
 
   app.listen(port, () =>
     console.info(
-      `Backend Ethereum Exporter started on http://localhost:${port}`
+      `Backend Bitcoin Exporter started on http://localhost:${port}`
     )
   );
 
