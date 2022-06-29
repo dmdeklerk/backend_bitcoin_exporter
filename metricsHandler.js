@@ -8,16 +8,16 @@ const {
   totalProgressPercentageMetric,
   blockchainSizeOnDiskBytesMetric,
 } = require("./metrics");
+const client = new Client({ 
+  host: options.host, 
+  username: options.user, 
+  password: options.pass, 
+  port: options.rpcport 
+});  
 
 const metricsHandler = async (req, res) => {
   res.set("Content-Type", register.contentType);
 
-  const client = new Client({ 
-    host: options.host, 
-    username: options.user, 
-    password: options.pass, 
-    port: options.rpcport 
-  });  
   const blockchainInfoPromise = client.getBlockchainInfo().then((data) => {
     totalBlocksMetric.set(data.blocks)
     totalHeadersMetric.set(data.headers)
@@ -29,7 +29,7 @@ const metricsHandler = async (req, res) => {
     blockchainSizeOnDiskBytesMetric.set(size);
   });
 
-  Promise.all([blockNumberPromise, sizeOnDiskPromise, ipcSyncingPromise])
+  Promise.all([blockchainInfoPromise, sizeOnDiskPromise])
     .then(() =>
       register.metrics().then((metrics) => {
         res.end(metrics);
